@@ -1,0 +1,30 @@
+export default () => ({
+  server: process.env.SERVER_HOST,
+  port: process.env.PORT || 3000,
+  expiration: process.env.EXPIRATION_MINUTES || 1,
+  database: {
+    type: process.env.TYPEORM_CONNECTION || 'postgres',
+    host: process.env.TYPEORM_HOST,
+    port: process.env.TYPEORM_PORT,
+    database: process.env.TYPEORM_DATABASE,
+    username: process.env.TYPEORM_USERNAME,
+    password: process.env.TYPEORM_PASSWORD,
+    entities: ['dist/**/*.entity{ .ts,.js}'],
+    synchronize: false,
+    migrations: ['dist/migrations/*{.ts,.js}'],
+    migrationsTableName: 'migrations_typeorm',
+    migrationsRun: true,
+    extra: {
+      ssl: process.env.NODE_ENV == 'production',
+      rejectUnauthorized: false,
+    },
+  },
+  database_test: {
+    type: 'sqlite',
+    entities: ['./src/**/*.entity{.ts,.js}', './dist/**/*.entity{ .ts,.js}'],
+    migrations: ['./dist/migrations/*{.ts,.js}'],
+    database: ':memory:',
+    username: '',
+    password: '',
+  },
+});
