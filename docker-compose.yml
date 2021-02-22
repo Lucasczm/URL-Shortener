@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  app_shortner:
+    build:
+      context: .
+    environment:
+      NODE_ENV: development
+      SERVER_HOST: 'http://localhost:3000'
+      TYPEORM_CONNECTION: 'postgres'
+      TYPEORM_HOST: 'postgres'
+      TYPEORM_PORT: 5432
+      TYPEORM_USERNAME: 'postgres'
+      TYPEORM_PASSWORD: 'password1234!'
+      TYPEORM_DATABASE: 'urlshortener'
+      EXPIRATION_MINUTES: 2
+      PORT: 3000
+
+    ports:
+      - '3000:3000'
+    networks:
+      - postgres-network
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: 'password1234!'
+      POSTGRES_DB: 'urlshortener'
+    ports:
+      - '5432:5432'
+    networks:
+      - postgres-network
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'lucascezarmachado@gmail.com'
+      PGADMIN_DEFAULT_PASSWORD: 'password1234!'
+    ports:
+      - '15432:80'
+    networks:
+      - postgres-network
+
+networks:
+  postgres-network:
+    driver: bridge
